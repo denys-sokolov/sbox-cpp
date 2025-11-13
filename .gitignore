@@ -1,0 +1,25 @@
+build/
+out/
+
+# CLion
+.idea/
+cmake-build-*/
+
+# CMake
+CMakeUserConfig.cmake
+CMakeUserPresets.json
+
+# Python
+__pycache__/
+.venv/
+*.egg-info/
+*.egg
+*.py[cod]
+*$py.class
+
+# Visual Studio Code
+.vscode/
+
+# Visual Studio
+.vs/
+CMakeSettings.json

@@ -1,0 +1,123 @@
+{
+  "$schema": "https://cmake.org/cmake/help/latest/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json",
+  "version": 9,
+  "include": [
+    "${fileDir}/../common/CMakeBasePresets.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "base-windows-x86-ninja-msvc-195",
+      "hidden": true,
+      "inherits": "base-conan",
+      "architecture": {
+        "value": "x86",
+        "strategy": "external"
+      },
+      "toolchainFile": "${fileDir}/Toolchain.cmake"
+    },
+    {
+      "name": "development-windows-x86-ninja-msvc-195",
+      "displayName": "Development",
+      "description": "Development configuration for Windows x86 MSVC 19.5x",
+      "inherits": "base-windows-x86-ninja-msvc-195",
+      "generator": "Ninja Multi-Config",
+      "cacheVariables": {
+        "CMAKE_CONFIGURATION_TYPES": "Debug;RelWithDebInfo",
+        "USE_STL_HARDENING": "TRUE"
+      }
+    },
+    {
+      "name": "shipping-windows-x86-ninja-msvc-195",
+      "displayName": "Shipping",
+      "description": "Shipping configuration for Windows x86 MSVC 19.5x",
+      "inherits": "base-windows-x86-ninja-msvc-195",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "$env{CI}",
+        "rhs": "true"
+      }
+    },
+    {
+      "name": "testing-windows-x86-ninja-msvc-195",
+      "displayName": "Testing",
+      "description": "Testing configuration for Windows x86 MSVC 19.5x",
+      "inherits": "base-windows-x86-ninja-msvc-195",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "USE_STL_HARDENING": "TRUE"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "$env{CI}",
+        "rhs": "true"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "development-windows-x86-ninja-msvc-195-debug",
+      "displayName": "Debug",
+      "configurePreset": "development-windows-x86-ninja-msvc-195",
+      "configuration": "Debug"
+    },
+    {
+      "name": "development-windows-x86-ninja-msvc-195-relwithdebinfo",
+      "displayName": "RelWithDebInfo",
+      "configurePreset": "development-windows-x86-ninja-msvc-195",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "shipping-windows-x86-ninja-msvc-195",
+      "displayName": "Shipping",
+      "configurePreset": "shipping-windows-x86-ninja-msvc-195",
+      "cleanFirst": true,
+      "condition": {
+        "type": "equals",
+        "lhs": "$env{CI}",
+        "rhs": "true"
+      }
+    },
+    {
+      "name": "testing-windows-x86-ninja-msvc-195",
+      "displayName": "Testing",
+      "configurePreset": "testing-windows-x86-ninja-msvc-195",
+      "cleanFirst": true,
+      "condition": {
+        "type": "equals",
+        "lhs": "$env{CI}",
+        "rhs": "true"
+      }
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "shipping-windows-x86-ninja-msvc-195",
+      "displayName": "Shipping",
+      "configurePreset": "shipping-windows-x86-ninja-msvc-195",
+      "condition": {
+        "type": "equals",
+        "lhs": "$env{CI}",
+        "rhs": "true"
+      },
+      "generators": [
+        "ZIP"
+      ]
+    },
+    {
+      "name": "testing-windows-x86-ninja-msvc-195",
+      "displayName": "Testing",
+      "configurePreset": "testing-windows-x86-ninja-msvc-195",
+      "condition": {
+        "type": "equals",
+        "lhs": "$env{CI}",
+        "rhs": "true"
+      },
+      "generators": [
+        "ZIP"
+      ]
+    }
+  ]
+}

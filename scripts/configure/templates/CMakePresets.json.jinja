@@ -1,0 +1,121 @@
+{
+  "$schema": "https://cmake.org/cmake/help/latest/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json",
+  "version": 9,
+  "include": [
+    "${fileDir}/../common/CMakeBasePresets.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "base-{{ build_spec_name }}",
+      "hidden": true,
+      "inherits": "base-conan",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "toolchainFile": "${fileDir}/Toolchain.cmake"
+    },
+    {
+      "name": "development-{{ build_spec_name }}",
+      "displayName": "Development",
+      "description": "Development configuration for {{ detailed_build_spec_name }}",
+      "inherits": "base-{{ build_spec_name }}",
+      "generator": "Ninja Multi-Config",
+      "cacheVariables": {
+        "CMAKE_CONFIGURATION_TYPES": "Debug;RelWithDebInfo"
+      }
+    },
+    {
+      "name": "shipping-{{ build_spec_name }}",
+      "displayName": "Shipping",
+      "description": "Shipping configuration for {{ detailed_build_spec_name }}",
+      "inherits": "base-{{ build_spec_name }}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "$env{CI}",
+        "rhs": "true"
+      }
+    },
+    {
+      "name": "testing-{{ build_spec_name }}",
+      "displayName": "Testing",
+      "description": "Testing configuration for {{ detailed_build_spec_name }}",
+      "inherits": "base-{{ build_spec_name }}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "$env{CI}",
+        "rhs": "true"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "development-{{ build_spec_name }}-debug",
+      "displayName": "Debug",
+      "configurePreset": "development-{{ build_spec_name }}",
+      "configuration": "Debug"
+    },
+    {
+      "name": "development-{{ build_spec_name }}-relwithdebinfo",
+      "displayName": "RelWithDebInfo",
+      "configurePreset": "development-{{ build_spec_name }}",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "shipping-{{ build_spec_name }}",
+      "displayName": "Shipping",
+      "configurePreset": "shipping-{{ build_spec_name }}",
+      "cleanFirst": true,
+      "condition": {
+        "type": "equals",
+        "lhs": "$env{CI}",
+        "rhs": "true"
+      }
+    },
+    {
+      "name": "testing-{{ build_spec_name }}",
+      "displayName": "Testing",
+      "configurePreset": "testing-{{ build_spec_name }}",
+      "cleanFirst": true,
+      "condition": {
+        "type": "equals",
+        "lhs": "$env{CI}",
+        "rhs": "true"
+      }
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "shipping-{{ build_spec_name }}",
+      "displayName": "Shipping",
+      "configurePreset": "shipping-{{ build_spec_name }}",
+      "condition": {
+        "type": "equals",
+        "lhs": "$env{CI}",
+        "rhs": "true"
+      },
+      "generators": [
+        "ZIP"
+      ]
+    },
+    {
+      "name": "testing-{{ build_spec_name }}",
+      "displayName": "Testing",
+      "configurePreset": "testing-{{ build_spec_name }}",
+      "condition": {
+        "type": "equals",
+        "lhs": "$env{CI}",
+        "rhs": "true"
+      },
+      "generators": [
+        "ZIP"
+      ]
+    }
+  ]
+}

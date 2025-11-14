@@ -1,0 +1,9 @@
+[settings]
+os=Windows
+arch=x86_64
+build_type=Debug
+compiler=msvc
+compiler.cppstd=23
+compiler.runtime_type=Debug
+compiler.runtime=static
+compiler.version=194
